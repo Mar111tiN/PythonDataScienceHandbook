@@ -30,7 +30,7 @@ def visualize_tree(estimator, X, y, boundaries=True,
     Z = Z.reshape(xx.shape)
     contours = ax.contourf(xx, yy, Z, alpha=0.3,
                            levels=np.arange(n_classes + 1) - 0.5,
-                           cmap='viridis', clim=(y.min(), y.max()),
+                           cmap='viridis',
                            zorder=1)
 
     ax.set(xlim=xlim, ylim=ylim)
@@ -58,15 +58,15 @@ def visualize_tree(estimator, X, y, boundaries=True,
         plot_boundaries(0, xlim, ylim)
 
 
-def plot_tree_interactive(X, y):
-    def interactive_tree(depth=5):
+def plot_tree_interactive(X, y, depth=[1,5,20]):
+    def interactive_tree(depth=max(depth)):
         clf = DecisionTreeClassifier(max_depth=depth, random_state=0)
         visualize_tree(clf, X, y)
 
-    return interact(interactive_tree, depth=[1, 5])
+    return interact(interactive_tree, depth=depth)
 
 
-def randomized_tree_interactive(X, y):
+def randomized_tree_interactive(X, y, random_states=[0, 100]):
     N = int(0.75 * X.shape[0])
     
     xlim = (X[:, 0].min(), X[:, 0].max())
@@ -80,4 +80,4 @@ def randomized_tree_interactive(X, y):
         visualize_tree(clf, X[i[:N]], y[i[:N]], boundaries=False,
                        xlim=xlim, ylim=ylim)
     
-    interact(fit_randomized_tree, random_state=[0, 100]);
+    interact(fit_randomized_tree, random_state=random_states);
